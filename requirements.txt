@@ -1,6 +1,6 @@
-# Core Data Handling and Analysis
+## Core Data Handling and Analysis
 pandas
 pyspark
 
-# API Integration
+## API Integration
 requests
