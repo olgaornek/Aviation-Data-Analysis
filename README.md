@@ -1,5 +1,20 @@
 # Aviation-Data-Analysis
 This project focuses on leveraging aviation data to simulate how an airline or airport authority can extract actionable insights using big data tools. 
 
-## Business Overview
-The airline industry operates on a fast-paced, data-driven environment where efficiency and real-time decision-making are crucial to maintaining customer satisfaction and profitability. Airlines must monitor various Key Perfomance Indicators (KPIs) such as flight volumn, on-time performance, and route efficiency to optimize operations. This project focus on leveraging aviation data to simulate how an airline or airport authority can extract actionable insights using big data tools. By utilizing flight information from the AviationStack API and processing it through Databricks, this project aims to showcase how real-time data can support smarter scheduling, route planning, and performance analysis across airline networks.
+The airline industry operates on a fast-paced, data-driven environment where efficiency and real-time decision-making are crucial. This project simulates an aviation data pipeline leveraging the Databricks Lakehouse Platform to process flight information.
+
+By utilizing flight data from the AviationStack API (simulated via CSV) and processing it with Apache Spark, we demonstrate how airline and airport authorities can extract actionable insights for smarter scheduling, route planning, and performance analysis.
+
+
+## Key Features
+KPIs: Average Departure Delay in Minutes, 
+      Current Flight Status,
+      On-Time Performance.
+
+Route Performance Analysis: Top 10 Busiest Airport,
+                            Flight Frequency per Route or Region.
+
+Fleet Analysis: Fleet Average Age by Country,
+                Fleet size by country,
+                Top 5 of the oldest airlines across the world.
+                              
