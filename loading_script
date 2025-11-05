@@ -1,0 +1,21 @@
+import requests
+import datetime
+import pandas as pd
+
+datetime.datetime.now()
+
+
+api_key = "b034407a2aea88efea802d4e0059a8c7"
+test_url = f"https://api.aviationstack.com/v1/flights?access_key={api_key}&limit=50"
+
+try:
+    response = requests.get(test_url, timeout=10)
+    print(f"Status Code: {response.status_code}")
+    print("Sample Response:")
+    
+    # Pretty-print JSON
+    import json
+    print(json.dumps(response.json(), indent=2))
+    
+except Exception as e:
+    print(f"Error: {e}")
