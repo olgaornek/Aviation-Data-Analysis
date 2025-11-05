@@ -1,3 +1,5 @@
+### FOR KPIs and ROUTE PERFORMANCE ANALYSIS ###
+
 df = pd.read_csv(
     '/Workspace/Users/n01719419@humber.ca/ss.csv', 
     infer_datetime_format=True)
@@ -10,5 +12,20 @@ df['arrival_actual'] = pd.to_datetime(df['arrival_actual'])
 
 df_spark = spark.createDataFrame(df)
 df_spark.createOrReplaceTempView("temp_view_ss")
+
+display(df)
+
+
+##########################
+### FOR FLEET ANALYSIS ###
+
+#changing the type of columns 'date_founded' to datetime, 'fleet_average_ager' to numeric, 'fleet_size' to float.
+#creating visualization 'Fleet_average_age by Country' and 'Fleet_size by Country'
+df['date_founded'] = pd.to_datetime(df['date_founded'], errors='coerce')
+df['fleet_average_age'] = pd.to_numeric(df['fleet_average_age'], errors='coerce')
+df['fleet_size'] = df['fleet_size'].astype('float64')
+
+df_spark = spark.createDataFrame(df)
+df_spark.createOrReplaceTempView("airlines_data")
 
 display(df)
