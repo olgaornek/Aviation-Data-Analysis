@@ -1,0 +1,6 @@
+# Core Data Handling and Analysis
+pandas
+pyspark
+
+# API Integration
+requests
