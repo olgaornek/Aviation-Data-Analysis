@@ -1,4 +1,4 @@
-## Average Departure Delay time by Airline
+AVERAGE DEPARTURE DELAY TIME BY AIRLINE
 %sql
 SELECT airline, 
        COUNT(*) AS total_flights,
