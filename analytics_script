@@ -1,4 +1,5 @@
-AVERAGE DEPARTURE DELAY TIME BY AIRLINE
+###############################################
+### AVERAGE DEPARTURE DELAY TIME BY AIRLINE ###
 %sql
 SELECT airline, 
        COUNT(*) AS total_flights,
@@ -7,7 +8,10 @@ FROM temp_view_ss
 GROUP BY airline
 ORDER BY total_flights DESC
 
-## Current Flight Status
+
+
+#############################
+### CURRENT FLIGHT STATUS ###
 from pyspark.sql.functions import col, when
 
 df_spark = df_spark.withColumn(
@@ -20,12 +24,14 @@ df_spark = df_spark.withColumn(
 flight_status_count = df_spark.groupBy("flight_status").count()
 display(flight_status_count)
 
-## Busiest Route
-### 🚀 Combined count + display + chart in one go
+
+#####################
+### BUSIEST ROUTE ###
+# 🚀 Combined count + display + chart in one go
 
 from pyspark.sql.functions import col, coalesce, lit, desc
 
-### 1. Compute departures and arrivals
+# 1. Compute departures and arrivals
 departure_counts = (
     df_spark
       .filter(col("departure_airport").isNotNull())
@@ -43,7 +49,7 @@ arrival_counts = (
       .withColumnRenamed("count", "arrival_count")
 )
 
-### 2. Join & totalize
+#2. Join & totalize
 airport_counts = (
     departure_counts
       .join(arrival_counts, on="airport", how="full_outer")
@@ -57,14 +63,16 @@ airport_counts = (
       .limit(10)
 )
 
-### 3. Show tables
+# 3. Show tables
 print("=== Flight frequency per airport ===")
 display(airport_counts)
 
 print("=== Busiest airport ===")
 display(airport_counts.limit(1))
 
-# Flight Frequency Per Route or Region
+
+###########################################
+### FLIGHT FREQUENCY PER ROUTE OR REGION ###
 result = (
     df_spark
       .groupBy(
@@ -78,10 +86,10 @@ result = (
 
 display(result)
 
-#### Convert to Pandas for plotting
+# Convert to Pandas for plotting
 pdf_result = result.toPandas()
 
-##### Plot the top 10 routes in descending order
+# Plot the top 10 routes in descending order
 plt.figure(figsize=(12, 8))
 plt.barh(pdf_result['starting_location'] + " -> " + pdf_result['destination'], pdf_result['count'])
 plt.xlabel('Number of Flights')
@@ -91,32 +99,34 @@ plt.gca().invert_yaxis()  # Invert y-axis to show data in descending order
 plt.tight_layout()
 plt.show()
 
-# Active Flight Punctuality by Airport & Direction
+
+########################################################
+### ACTIVE FLIGTH PUNCTUALITY BY AIRPORT & DIRECTION ###
 from pyspark.sql.functions import when, col
 
-#### Helper function to compute punctuality
+# Helper function to compute punctuality
 def compute_punctuality(actual_col, scheduled_col):
     return when(col(actual_col).isNull(), None) \
            .when(col(actual_col) > col(scheduled_col), "Late") \
            .when(col(actual_col) < col(scheduled_col), "Early") \
            .otherwise("On-Time")
 
-#### Convert pandas DataFrame to Spark DataFrame
+# Convert pandas DataFrame to Spark DataFrame
 df_spark = spark.createDataFrame(df)
 
-#### Add departure and arrival punctuality columns
+# Add departure and arrival punctuality columns
 df_spark = df_spark \
     .withColumn("departure_punctuality", compute_punctuality("departure_actual", "departure_scheduled")) \
     .withColumn("arrival_punctuality", compute_punctuality("arrival_actual", "arrival_scheduled"))
 
-#### Check schema and columns
+# Check schema and columns
 df_spark.printSchema()
 print("Columns:", df_spark.columns)
 
-#### Recreate the temp view
+# Recreate the temp view
 df_spark.createOrReplaceTempView("temp_view")
 
-#### Show via DataFrame API
+# Show via DataFrame API
 display(df_spark)
 
 
@@ -125,7 +135,7 @@ from pyspark.sql.functions import col, lit
 
 spark = SparkSession.builder.getOrCreate()
 
-#### 1) Compute departure counts
+# 1) Compute departure counts
 dep_counts = spark.sql("""
   SELECT
     departure_airport   AS airport,
@@ -137,7 +147,7 @@ dep_counts = spark.sql("""
   GROUP BY departure_airport, departure_punctuality, flight_status
 """).withColumn("direction", lit("departure"))
 
-#### # 2) Compute arrival counts
+# 2) Compute arrival counts
 arr_counts = spark.sql("""
   SELECT
     arrival_airport     AS airport,
@@ -149,23 +159,23 @@ arr_counts = spark.sql("""
   GROUP BY arrival_airport, arrival_punctuality, flight_status
 """).withColumn("direction", lit("arrival"))
 
-#### 3) Union into one DataFrame
+# 3) Union into one DataFrame
 combined = dep_counts.unionByName(arr_counts)
 
-#### 4) Register / inspect
+# 4) Register / inspect
 combined.createOrReplaceTempView("punctuality_summary")
 combined.printSchema()
 print("Columns:", combined.columns)
 display(combined)
 
-#### —— Optional: pivot & plot with pandas + matplotlib —— #
+# —— Optional: pivot & plot with pandas + matplotlib —— #
 
-#### Convert to Pandas (only if small enough)
+# Convert to Pandas (only if small enough)
 pdf = combined.toPandas()
 
 import matplotlib.pyplot as plt
 
-#### Pivot so each punctuality category becomes a column
+# Pivot so each punctuality category becomes a column
 pivoted = pdf.pivot_table(
     index=["airport","direction"],
     columns="punctuality",
@@ -173,7 +183,7 @@ pivoted = pdf.pivot_table(
     fill_value=0
 )
 
-#### Make a stacked bar chart
+# Make a stacked bar chart
 pivoted.plot(
     kind="bar",
     stacked=True,
