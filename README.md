@@ -7,14 +7,17 @@ By utilizing flight data from the AviationStack API (simulated via CSV) and proc
 
 
 ## Key Features
-### KPIs: Average Departure Delay in Minutes, 
-      Current Flight Status,
-      On-Time Performance.
+### KPIs:
+Average Departure Delay in Minutes, 
+Current Flight Status,
+On-Time Performance.
 
-### Route Performance Analysis: Top 10 Busiest Airport,
-                            Flight Frequency per Route or Region.
+### Route Performance Analysis:
+Top 10 Busiest Airport,
+Flight Frequency per Route or Region.
 
-### Fleet Analysis: Fleet Average Age by Country,
-                Fleet Size by Country,
-                Top 5 of the Oldest Airlines Across the World.
-                              
+### Fleet Analysis: 
+Fleet Average Age by Country,
+Fleet Size by Country,
+Top 5 of the Oldest Airlines Across the World.
+                             
