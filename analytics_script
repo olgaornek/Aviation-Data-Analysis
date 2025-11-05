@@ -195,3 +195,32 @@ plt.xticks(rotation=45, ha="right")
 plt.tight_layout()
 plt.show()
 
+
+######################
+### FLEET ANALYSIS ###
+
+# Fleet average age by country
+%sql
+SELECT country_name,fleet_average_age
+FROM airlines_data
+GROUP BY country_name, fleet_average_age;
+
+
+# Fleet size by country
+%sql
+SELECT country_name, 
+       ROUND(AVG(fleet_size), 0) AS average_fleet_size
+FROM airlines_data
+GROUP BY country_name
+
+
+# Top 5 of the oldest airlines across the world.
+#creating a new column displayed the age of each airline according to the years they were founded.
+from datetime import datetime
+
+df['date_founded'] = pd.to_datetime(df['date_founded'])
+df['years_since_founded'] = (datetime.now() - df['date_founded']).dt.days // 365
+
+#creating the table with top 5 the oldest airlines.
+df_top_5_years = df.nlargest(5, 'years_since_founded')[['country_name', 'airline_name', 'type', 'years_since_founded']]
+display(df_top_5_years)
