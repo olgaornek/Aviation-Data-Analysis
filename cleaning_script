@@ -1,0 +1,14 @@
+df = pd.read_csv(
+    '/Workspace/Users/n01719419@humber.ca/ss.csv', 
+    infer_datetime_format=True)
+
+df['flight_date'] = pd.to_datetime(df['flight_date']).dt.date
+df['departure_scheduled'] = pd.to_datetime(df['departure_scheduled'])
+df['arrival_scheduled'] = pd.to_datetime(df['arrival_scheduled'])
+df['departure_actual'] = pd.to_datetime(df['departure_actual'])
+df['arrival_actual'] = pd.to_datetime(df['arrival_actual'])
+
+df_spark = spark.createDataFrame(df)
+df_spark.createOrReplaceTempView("temp_view_ss")
+
+display(df)
