@@ -1,3 +1,4 @@
+### FOR KPIs and ROUTE PERFORMANCE ANALYSIS ###
 import requests
 import datetime
 import pandas as pd
@@ -19,3 +20,28 @@ try:
     
 except Exception as e:
     print(f"Error: {e}")
+
+
+##########################
+### FOR FLEET ANALYSIS ###
+
+import requests
+import pandas as pd
+
+url = "https://api.aviationstack.com/v1/airlines?access_key=5f83b3780d04518fbe71662c84b2137b"
+
+response = requests.get(url)
+data = response.json()
+
+df = pd.DataFrame(data['data'])
+
+#changing the type of columns 'date_founded' to datetime, 'fleet_average_ager' to numeric, 'fleet_size' to float.
+#creating visualization 'Fleet_average_age by Country' and 'Fleet_size by Country'
+df['date_founded'] = pd.to_datetime(df['date_founded'], errors='coerce')
+df['fleet_average_age'] = pd.to_numeric(df['fleet_average_age'], errors='coerce')
+df['fleet_size'] = df['fleet_size'].astype('float64')
+
+df_spark = spark.createDataFrame(df)
+df_spark.createOrReplaceTempView("airlines_data")
+
+display(df)
