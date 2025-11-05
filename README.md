@@ -15,6 +15,6 @@ Route Performance Analysis: Top 10 Busiest Airport,
                             Flight Frequency per Route or Region.
 
 Fleet Analysis: Fleet Average Age by Country,
-                Fleet size by country,
-                Top 5 of the oldest airlines across the world.
+                Fleet Size by Country,
+                Top 5 of the Oldest Airlines Across the World.
                               
